@@ -7,7 +7,7 @@ NOM_JAR="minecraft_server.jar" # Nom du fichier .jar de votre serveur minecraft 
 MEMALOC=512 # Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
 
 server_stop() {
-        screen -S minecraft -p 0 -X stuff "`printf "stop.\r"`"; sleep 5
+        screen -S minecraft -p 0 -X stuff "`printf "stop\r"`"; sleep 5
 }
 
 case "$1" in
