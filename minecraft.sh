@@ -2,6 +2,9 @@
 #Création par unixfox (Emilien) - Created by unixfox
 #Exec by Julien00859
 
+DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
+SERVICE_NAME=Minecraft
+
 MC_PATH=/le/répertoire/où/se/trouve/votre/serveur/ #Répertoire de votre serveur minecraft - Directory of your Minecraft server
 NOM_JAR="minecraft_server.jar" # Nom du fichier .jar de votre serveur minecraft - Name of the .jar file of your Minecraft server
 MEMALOC=512 # Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
