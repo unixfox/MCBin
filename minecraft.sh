@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 #Création par unixfox (Emilien) - Created by unixfox
 #Merci Julien008 pour les suggestions et report de bugs.
 
@@ -61,8 +61,7 @@ case "$1" in
         commande "$*"
         else
         echo "Vous devez spécifier une commande (exemple : 'help')."
-  fi
-  ;;
+  fi;;
   console)
     console
     ;;

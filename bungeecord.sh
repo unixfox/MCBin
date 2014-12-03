@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 #Création par unixfox (Emilien) - Created by unixfox
 #Merci Julien008 pour les suggestions et report de bugs. Et son petit code sur les boucles !
 
@@ -33,6 +33,14 @@ server_stop() {
 	    done
 }
 
+server_stop_set() {
+          echo -n "Arrêt du serveur ${2}..."
+          screen -S $SCREEN_NAME"${2}" -p 0 -X stuff "`printf "save-all\r"`"
+          screen -S $SCREEN_NAME"${2}" -p 0 -X stuff "`printf "stop\r"`"
+          sleep 3
+          echo " [OK]"
+}
+
 server_start() {
 	    echo -n "Lancement du proxy..."
         cd $MC_PATH/proxy && screen -h 1024 -dmS proxy java -jar -Xmx${MEMALOCPROXY}M -Xms128M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 bungeecord.jar nogui;
@@ -46,13 +54,13 @@ server_start() {
 			echo " [OK]"
 	    done
 		echo -n "Tous les serveurs ont étés démarrés !"
-		case $2 in
-	    "server")
-			echo -n "Lancement du serveur ${2}..."
-			cd $MC_PATH/server"${2}" && screen -h 1024 -dmS $SCREEN_NAME"${2}" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui;
-			sleep 1
-			echo " [OK]"
-		esac
+}
+
+server_start_set() {
+  echo -n "Lancement du serveur ${2}..."
+      cd $MC_PATH/server"${2}" && screen -h 1024 -dmS $SCREEN_NAME"${2}" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui
+      sleep 1
+      echo " [OK]"
 }
 
 commande() {
@@ -70,11 +78,19 @@ console() {
 # Corps du script
 case "$1" in
   start)
-        server_start
-        ;;
+      if [[ "$2" == "" ]]
+      then
+      server_start
+      else
+        server_start_set
+        fi;;
   stop)
-        server_stop
-        ;;
+        if [[ "$2" == "" ]]
+      then
+      server_stop
+    else
+        server_stop_set
+        fi;;
   restart)
     server_stop
     server_start
