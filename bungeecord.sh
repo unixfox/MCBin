@@ -3,15 +3,18 @@
 #Merci Julien008 pour les suggestions et report de bugs.
 
 #Descriptions du service
-DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
+DESC="Script permettant de gérer plusieurs serveurs Minecraft à partir d'un service."
 SERVICE_NAME=minecraft
 
 #Options
-MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft - Directory of your Minecraft server
-NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft - Name of the .jar file of your Minecraft server
-MEMALOC=512 #Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer. Argument warn à ajouter à la commande stop ou restart.
+MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs/' #Répertoire général où se trouve vos serveurs Minecraft
+NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft
+MEMALOC=512 #Mémoire à allouer pour chacun de vos serveurs minecraft
+MEMALOCBUNGEE=512 #Mémoire à allouer pour Bungeecord
+TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
 SCREEN_NAME='minecraft' #Nom de la fenêtre.
+NBRSERV=2 #Nombre de serveurs
+NBRSERVMIN=0
 
 #Variables
 server_stop() {
@@ -25,10 +28,13 @@ server_stop() {
 }
 
 server_start() {
-        echo -n "Lancement du serveur minecraft..."
-        cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui; 
-        sleep 1
-        echo " [OK]"
+		break (NBRSERV=0; NBRSERVMIN<=$NBRSERV; NBRSERVMIN++) {
+			echo -n "Lancement du serveur minecraft..."
+			cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME${NBRSERVMIN} java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 /server${NBRSERVMIN}/$NOM_JAR nogui;
+			sleep 1
+			echo " [OK]"
+		}
+		echo -n "Tous les serveurs ont étés démarrés !"
 }
 
 commande() {
