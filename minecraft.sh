@@ -24,7 +24,7 @@ server_stop() {
 server_start() {
   echo -n "Lancement du serveur minecraft..."
         cd $MC_PATH && screen -h 1024 -dmS minecraft $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR; 
-  sleep 1
+        sleep 1
         echo "."
 }
 
@@ -54,9 +54,9 @@ case "$1" in
     ;;
   exec)
         if [ $# -gt 1 ]; then
-  shift
-  commande "$*"
-  else
+        shift
+        commande "$*"
+        else
         echo "Vous devez spécifier une commande (exemple : 'help')."
   fi
   ;;
