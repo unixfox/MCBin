@@ -10,11 +10,10 @@ SERVICE_NAME=minecraft
 MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs/' #Répertoire général où se trouve vos serveurs Minecraft
 NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft
 MEMALOC=512 #Mémoire à allouer pour chacun de vos serveurs minecraft
-MEMALOCBUNGEE=512 #Mémoire à allouer pour Bungeecord
+MEMALOCPROXY=512 #Mémoire à allouer pour Bungeecord
 TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
 SCREEN_NAME='minecraft' #Nom de la fenêtre.
 NBRSERV=2 #Nombre de serveurs
-NBRSERVMIN=0
 
 #Variables
 server_stop() {
@@ -28,12 +27,17 @@ server_stop() {
 }
 
 server_start() {
-		break (NBRSERV=0; NBRSERVMIN<=$NBRSERV; NBRSERVMIN++) {
-			echo -n "Lancement du serveur minecraft..."
-			cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME${NBRSERVMIN} java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 /server${NBRSERVMIN}/$NOM_JAR nogui;
+	    echo -n "Lancement du proxy..."
+        cd $MC_PATH/proxy && screen -h 1024 -dmS proxy java -jar -Xmx${MEMALOCPROXY}M -Xms128M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 bungeecord.jar nogui;
+        sleep 1
+        echo " [OK]"
+	    for NBRSERVMIN in `seq 1 $NBRSERV`;
+	    do
+	    	echo -n "Lancement du serveur ${NBRSERVMIN}..."
+			cd $MC_PATH/server"${NBRSERVMIN}" && screen -h 1024 -dmS $SCREEN_NAME"${NBRSERVMIN}" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui;
 			sleep 1
 			echo " [OK]"
-		}
+	    done
 		echo -n "Tous les serveurs ont étés démarrés !"
 }
 
