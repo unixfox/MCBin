@@ -7,7 +7,7 @@ DESC="Script permettant de gérer plusieurs serveurs Minecraft à partir d'un se
 SERVICE_NAME=minecraft
 
 #Options
-MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs/' #Répertoire général où se trouve vos serveurs Minecraft
+MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs' #Répertoire général où se trouve vos serveurs Minecraft /!\ Ne pas mettre de / à la fin du dernier répertoire !
 NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft
 MEMALOC=512 #Mémoire à allouer pour chacun de vos serveurs minecraft
 MEMALOCPROXY=512 #Mémoire à allouer pour Bungeecord
@@ -20,7 +20,7 @@ server_stop() {
         echo -n "Arrêt du proxy..."
         screen -S proxy -p 0 -X stuff "`printf "broadcast Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
         sleep ${TPSWARN}
-        screen -S proxy -p 0 -X stuff "`printf "stop\r"`"
+        screen -S proxy -p 0 -X stuff "`printf "end\r"`"
         sleep 7
         echo " [OK]"
         for NBRSERVMIN in `seq 1 $NBRSERV`;
@@ -46,6 +46,13 @@ server_start() {
 			echo " [OK]"
 	    done
 		echo -n "Tous les serveurs ont étés démarrés !"
+		case $2 in
+	    "server")
+			echo -n "Lancement du serveur ${2}..."
+			cd $MC_PATH/server"${2}" && screen -h 1024 -dmS $SCREEN_NAME"${2}" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui;
+			sleep 1
+			echo " [OK]"
+		esac
 }
 
 commande() {
@@ -84,7 +91,7 @@ case "$1" in
     console
     ;;
   *)
-        echo "Utilisation: service minecraft {start|stop|exec <commande>|console}"
+        echo "Utilisation: service minecraft {start <server> <numéro>|stop|exec <commande>|console}"
         exit 1
         ;;
 esac
