@@ -1,10 +1,6 @@
 Minecraft-Server-Linux-service
 ==============================
 
-A french Linux service for your Minecraft server.
-
------------------------------------------
-
 Un service Linux pour votre serveur Minecraft.
 
 # Comment installer ce service ?
