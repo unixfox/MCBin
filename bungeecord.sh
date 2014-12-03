@@ -1,6 +1,6 @@
 #! /bin/sh
 #Création par unixfox (Emilien) - Created by unixfox
-#Merci Julien008 pour les suggestions et report de bugs.
+#Merci Julien008 pour les suggestions et report de bugs. Et son petit code sur les boucles !
 
 #Descriptions du service
 DESC="Script permettant de gérer plusieurs serveurs Minecraft à partir d'un service."
@@ -11,19 +11,26 @@ MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs/' #Répertoire général où
 NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft
 MEMALOC=512 #Mémoire à allouer pour chacun de vos serveurs minecraft
 MEMALOCPROXY=512 #Mémoire à allouer pour Bungeecord
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
+TPSWARN=10 #Temps après le quel bungeecord va s'arrêter.
 SCREEN_NAME='minecraft' #Nom de la fenêtre.
 NBRSERV=2 #Nombre de serveurs
 
 #Variables
 server_stop() {
-        echo -n "Arrêt du serveur Minecraft..."
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
+        echo -n "Arrêt du proxy..."
+        screen -S proxy -p 0 -X stuff "`printf "broadcast Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
         sleep ${TPSWARN}
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
+        screen -S proxy -p 0 -X stuff "`printf "stop\r"`"
         sleep 7
         echo " [OK]"
+        for NBRSERVMIN in `seq 1 $NBRSERV`;
+	    do
+	    	echo -n "Arrêt du serveur ${NBRSERVMIN}..."
+       		screen -S $SCREEN_NAME"${NBRSERVMIN}" -p 0 -X stuff "`printf "save-all\r"`"
+        	screen -S $SCREEN_NAME"${NBRSERVMIN}" -p 0 -X stuff "`printf "stop\r"`"
+        	sleep 3
+        	echo " [OK]"
+	    done
 }
 
 server_start() {
