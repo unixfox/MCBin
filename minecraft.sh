@@ -9,32 +9,31 @@ MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre ser
 NOM_JAR='minecraft_server.jar' # Nom du fichier .jar de votre serveur minecraft - Name of the .jar file of your Minecraft server
 MEMALOC=512 # Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
 TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer. Argument warn à ajouter à la commande stop ou restart.
-SCREEN_NAME=minecraft #Nom de la fenêtre.
+SCREEN_NAME='minecraft' #Nom de la fenêtre.
 
 server_stop() {
         echo -n "Arrêt du serveur Minecraft..."
-        screen -p 0 -S $SCREEN_NAME -X eval 'stuff \"say LE SERVEUR VA SE STOPPER DANS $TPSWARN SECONDES. Sauvegarde du serveur...\"\015'
-        screen -p 0 -S $SCREEN_NAME -X eval 'stuff \"save-all\"\015'
+        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
         sleep ${TPSWARN}
-        screen -p 0 -S $SCREEN_NAME -X eval 'stuff \"stop\"\015'
+        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
         sleep 7
-        echo "Serveur stoppé."
+        echo " [OK]"
 }
 
 server_start() {
   echo -n "Lancement du serveur minecraft..."
-        cd $MC_PATH && screen -h 1024 -dmS minecraft $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR; 
+        cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui; 
         sleep 1
-        echo "."
+        echo " [OK]"
 }
 
 commande() {
-  exec="$1";
-  pre_log_len=`wc -l "$MC_PATH/logs/latest.log" | awk '{print $1}'`
-      echo "Exécution de la commande."
-      screen -p 0 -S minecraft -X eval 'stuff \"$command\"\015'
-      sleep .1
-      tail -n $[`wc -l "$MC_PATH/logs/latest.log" | awk '{print $1}'`-$pre_log_len] "$MCPATH/logs/latest.log"
+     exec="$1";
+     echo "Exécution de la commande..."
+     screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
+     sleep .1
+     echo " [OK]"
 }
 
 console() {
