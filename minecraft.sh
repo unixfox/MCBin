@@ -1,5 +1,5 @@
 #! /bin/sh
-#Création par unixfox (Emilien) - Created by unixfox
+#Création par unixfox (Emilien)
 #Merci Julien008 pour les suggestions et report de bugs.
 
 #Descriptions du service
@@ -7,10 +7,10 @@ DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
 SERVICE_NAME=minecraft
 
 #Options
-MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft - Directory of your Minecraft server
-NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft - Name of the .jar file of your Minecraft server
-MEMALOC=512 #Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer. Argument warn à ajouter à la commande stop ou restart.
+MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft.
+NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft.
+MEMALOC=512 #Mémoire à allouer à votre serveur minecraft.
+TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
 SCREEN_NAME='minecraft' #Nom de la fenêtre.
 
 #Variables
