@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 #Création par unixfox (Emilien)
 #Merci Julien008 pour les suggestions et report de bugs.
 
