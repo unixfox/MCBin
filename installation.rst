@@ -35,6 +35,7 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 
 
 5. Une fois ceci fini enregistrez le tout !
+
 .. tip::
 
 	(ctrl + x & Yes & Enter pour nano)
