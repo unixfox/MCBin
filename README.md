@@ -1,4 +1,4 @@
-Minecraft-Server-Linux-service
+Minecraft-Server-Linux-service [![Build Status](https://travis-ci.org/unixfox/Minecraft-Server-Linux-service.svg?branch=master)](https://travis-ci.org/unixfox/Minecraft-Server-Linux-service)
 ==============================
 
 A Linux service for your Minecraft server.
