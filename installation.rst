@@ -28,18 +28,22 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 
 	sudo nano /etc/init.d/minecraft
 
-4. Changez les lignes des options à votre convenance.
 
-5. Une fois ceci fini enregistrez le tout !
+.. tip::
+
+	Changez les lignes des options à votre convenance.
+
+
+4. Une fois ceci fini enregistrez le tout !
 
 .. tip::
 
 	(ctrl + x & Yes & Enter pour nano)
 
 
-6. Ajoutons-le aux services du système :
+5. Ajoutons-le aux services du système :
 
-.. code:: bash
+..code:: bash
 
 	sudo update-rc.d minecraft defaults
 
