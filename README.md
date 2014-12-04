@@ -5,7 +5,7 @@ Un service Linux pour votre serveur Minecraft.
 
 --------------------------
 
-A french Linux service for your Minecraft server. [English version here](https://github.com/unixfox/Minecraft-Server-Linux-service/tree/master-en).
+A Linux service for your Minecraft server. [English version here](https://github.com/unixfox/Minecraft-Server-Linux-service/tree/master-en).
 
 # Comment installer ce service ?
 
