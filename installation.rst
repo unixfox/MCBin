@@ -29,7 +29,8 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 	sudo nano /etc/init.d/minecraft
 
 
-.. tip::
+
+.. tip:: astuce
 
 	Changez les lignes des options à votre convenance.
 
