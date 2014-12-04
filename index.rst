@@ -19,14 +19,13 @@ Installer le service
 
 .. _configuring:
 
-Configurer NodeBB
-------------------
+Fonctionnalités à venir
+-----------------------
 
 .. toctree::
     :maxdepth: 2
 
-    configuring/databases
-    configuring/proxies
+    roadmap
 
 Utiliser NodeBB
 ------------------
