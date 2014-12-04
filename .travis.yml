@@ -1,2 +1,2 @@
 language: bash
-script: bash minecraft.sh start
+script: bash minecraft.sh
