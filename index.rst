@@ -1,14 +1,14 @@
 .. image:: http://findicons.com/files/icons/1728/still_life/128/gnome_terminal.png
 
 |
-**Bienvenue** sur la documentation de *Unixfox* !
+**Bienvenue** sur la documentation du service Linux pour votre(vos) serveur(s) Minecraft !
 
 Table des matières
 =================
 
 .. _installing:
 
-Installer NodeBB
+Installer le service
 -----------------
 
 .. toctree::
