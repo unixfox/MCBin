@@ -4,4 +4,3 @@ script: bash minecraft.sh
 branches:
   only:
     - master
-    - dev-2.1
