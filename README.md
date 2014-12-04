@@ -1,8 +1,9 @@
-Minecraft-Server-Linux-service
-==============================
+Files of ReadTheDocs
+=================
+URL of the docs : http://docs.unixfox.eu
 
-Un service Linux pour votre serveur Minecraft.
+--------------------------------
 
-# Comment installer ce service ?
-
-Suivez étapes par étapes ce [tutoriel](http://devbukkit.fr/forum/threads/cr%C3%A9er-un-service-linux-pour-son-serveur-minecraft.1141/).
+Fichiers de ReadTheDocs
+=================
+Lien vers la documentation : http://docs.unixfox.eu
