@@ -13,3 +13,6 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 .. code:: bash
 
 	sudo wget https://github.com/unixfox/Minecraft-Server-Linux-service/releases/download/2.0/minecraft -P /etc/init.d
+
+
+2. Rendez-le exécutable :	
