@@ -107,7 +107,7 @@ case "$1" in
     console
     ;;
   *)
-        echo "Utilisation: service minecraft {start <server> <numéro>|stop|exec <commande>|console}"
+        echo "Utilisation: service minecraft {start <numéro>|stop|exec <commande>|console}"
         exit 0
         ;;
 esac
