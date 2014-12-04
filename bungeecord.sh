@@ -72,7 +72,7 @@ commande() {
 }
 
 console() {
-     screen -r $SCREEN_NAME
+     screen -r $SCREEN_NAME"${2}"
 }
 
 # Corps du script
