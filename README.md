@@ -1,3 +1,4 @@
+![Icon terminal](http://findicons.com/files/icons/1728/still_life/128/gnome_terminal.png)
 Minecraft-Server-Linux-service [![Build Status](https://travis-ci.org/unixfox/Minecraft-Server-Linux-service.svg?branch=master)](https://travis-ci.org/unixfox/Minecraft-Server-Linux-service)
 ==============================
 
