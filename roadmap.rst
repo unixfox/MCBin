@@ -4,9 +4,11 @@ Fonctionnalités à venir
 .. note::
 
 	La Roadmap est susceptible de changer fréquemment !
-	
 
-## [Version 2.1](https://github.com/unixfox/Minecraft-Server-Linux-service/tree/dev-2.1)
+
+`Version 2.1 <https://github.com/unixfox/Minecraft-Server-Linux-service/tree/dev-2.1>`
+^^^^^^^^^^^^
+
 * Aide incorporée au script. 
 * Vérifier si le serveur est démarré avant d'exécuter la commande start, restart et stop.
 * Force stop le serveur.
