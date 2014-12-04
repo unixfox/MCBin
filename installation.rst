@@ -30,6 +30,7 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 
 4. Changez les lignes des options à votre convenance.
 
+
 5. Une fois ceci fini enregistrez le tout !
 
 .. tip::
