@@ -1,22 +1,22 @@
-#! /bin/sh
-#Création par unixfox (Emilien)
-#Merci Julien008 pour les suggestions et report de bugs.
+#!/bin/bash
+#Created by unixfox
+#Thanks Julien008 for the suggestions and the bugs report.
 
 #Descriptions du service
-DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
+DESC="Script to manage a Minecraft server from a service."
 SERVICE_NAME=minecraft
 
 #Options
-MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft.
-NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft.
-MEMALOC=512 #Mémoire à allouer à votre serveur minecraft.
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
-SCREEN_NAME='minecraft' #Nom de la fenêtre.
+MC_PATH='/directory/of/your/server/' #Directory of your Minecraft server.
+NOM_JAR='minecraft_server.jar' #Name of the .jar file of your Minecraft server.
+MEMALOC=512 #Memory of your Minecraft Server.
+TPSWARN=10 #Time after that the server shutting down or restart.
+SCREEN_NAME='minecraft' #Name of the screen.
 
 #Variables
 server_stop() {
-        echo -n "Arrêt du serveur Minecraft..."
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+        echo -n "Shutting down the Minecraft server..."
+        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say The server will shutting down in $TPSWARN SECONDS.\r"`"
         screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
         sleep ${TPSWARN}
         screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
@@ -25,7 +25,7 @@ server_stop() {
 }
 
 server_start() {
-        echo -n "Lancement du serveur minecraft..."
+        echo -n "Starting Minecraft server..."
         cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui; 
         sleep 1
         echo " [OK]"
@@ -33,7 +33,7 @@ server_start() {
 
 commande() {
      exec="$1";
-     echo "Exécution de la commande..."
+     echo "Executing command..."
      screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
      sleep .1
      echo " [OK]"
@@ -60,14 +60,14 @@ case "$1" in
         shift
         commande "$*"
         else
-        echo "Vous devez spécifier une commande (exemple : 'help')."
+        echo "You must specify the command (exemple : 'help')."
   fi
   ;;
   console)
     console
     ;;
   *)
-        echo "Utilisation: service minecraft {start|stop|exec <commande>|console}"
+        echo "Utilisation: service minecraft {start|stop|exec <command>|console}"
         exit 1
         ;;
 esac
