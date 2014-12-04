@@ -1,4 +1,4 @@
-.. image:: http://unixfox.eu/unixfox.png
+.. image:: http://findicons.com/files/icons/1728/still_life/128/gnome_terminal.png
 
 |
 **Bienvenue** sur la documentation de *Unixfox* !
