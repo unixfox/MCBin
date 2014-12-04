@@ -67,7 +67,7 @@ case "$1" in
     ;;
   *)
         echo "Utilisation: service minecraft {start|stop|exec <commande>|console}"
-        exit 1
+        exit 0
         ;;
 esac
 
