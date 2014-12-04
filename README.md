@@ -1,8 +1,20 @@
 Minecraft-Server-Linux-service
 ==============================
 
-Un service Linux pour votre serveur Minecraft.
+A Linux service for your Minecraft server.
 
-# Comment installer ce service ?
+-------------------------
 
-Suivez étapes par étapes ce [tutoriel](http://devbukkit.fr/forum/threads/cr%C3%A9er-un-service-linux-pour-son-serveur-minecraft.1141/).
+Un service Linux pour votre serveur Minecraft. [Version française ici](https://github.com/unixfox/Minecraft-Server-Linux-service).
+
+# How to install the service ?
+
+1. Download the script : `https://github.com/unixfox/Minecraft-Server-Linux-service-en/releases/download/2.0/minecraft -P /etc/init.d`
+2. Make it executable : `sudo chmod a+x /etc/init.d/minecraft`
+3. Edit the service and change the lines of the options : `sudo nano /etc/init.d/minecraft`
+4. Save it (ctrl + x)
+5. Add it to system services : `sudo update-rc.d minecraft defaults`
+
+# How to use the service ?
+
+Just type the command : `service minecraft` and see the possibilities.
