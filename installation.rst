@@ -43,7 +43,7 @@ Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y i
 
 5. Ajoutons-le aux services du système :
 
-..code:: bash
+.. code:: bash
 
 	sudo update-rc.d minecraft defaults
 
