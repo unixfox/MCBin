@@ -1,10 +1,9 @@
 Installation du service
-==============================
+=======================
 
 .. note::
 
 	Si vous êtes novice en système Linux, ce tutoriel vous sera utile.
-
 
 
 Dans un premier cas, vous allons créer un fichier bash qui nous permettra d'y insérer une commande pour démarrer le serveur.
