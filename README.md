@@ -1,4 +1,3 @@
 Branche développement de la version 2.1
 ==============================
-
-  *Branche en développement*
+Plus d'informations à propos de la version 2.1 sur la [Roadmap](http://service-minecraft.unixfox.eu/roadmap/).
