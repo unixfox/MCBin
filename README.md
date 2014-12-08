@@ -10,4 +10,4 @@ A Linux service for your Minecraft server. [English version here](https://github
 
 # Comment installer ce service ?
 
-Suivez étapes par étapes ce [tutoriel](http://devbukkit.fr/forum/threads/cr%C3%A9er-un-service-linux-pour-son-serveur-minecraft.1141/).
+Suivez étapes par étapes ce [tutoriel](http://service-minecraft.unixfox.eu/installation/).
