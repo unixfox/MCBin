@@ -1,0 +1,142 @@
+#!/bin/bash
+#Création par unixfox (Emilien) - Created by unixfox
+#Merci Julien008 pour les suggestions et report de bugs. Et son petit code sur les boucles !
+
+#Descriptions du service
+DESC="Script permettant de gérer plusieurs serveurs Minecraft à partir d'un service."
+SERVICE_NAME=minecraft
+
+#Options
+MC_PATH='/le/répertoire/où/se/trouve/vos/serveurs' #Répertoire général où se trouve vos serveurs Minecraft /!\ Ne pas mettre de / à la fin du dernier répertoire !
+NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft
+MEMALOC=512 #Mémoire à allouer pour chacun de vos serveurs minecraft.
+MEMALOCPROXY=512 #Mémoire à allouer pour Bungeecord.
+TPSWARN=10 #Temps après le quel bungeecord va s'arrêter.
+SCREEN_NAME='minecraft0' # Laissez tel quel si vous ne savez pas par quoi changer.
+NBRSERV=2 #Nombre de serveurs
+
+#Variables
+server_stop_proxy() {
+		echo -n "Arrêt du proxy..."
+        screen -S proxy -p 0 -X stuff "`printf "broadcast Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+        sleep ${TPSWARN}
+        screen -S proxy -p 0 -X stuff "`printf "end\r"`"
+        sleep 1
+        echo " [OK]"
+}
+server_stop_server() {
+        for NBRSERVMIN in `seq 1 $NBRSERV`;
+		do
+			echo -n "Arrêt du serveur ${NBRSERVMIN}..."
+			screen -S $SCREEN_NAME"${NBRSERVMIN}" -p 0 -X stuff "`printf "stop\r"`"
+			sleep 1
+			echo " [OK]"
+		done
+}
+
+server_stop_set_server() {
+        echo -n "Arrêt du serveur $2..."
+		screen -S $SCREEN_NAME"$2" -p 0 -X stuff "`printf "stop\r"`"
+		sleep 1
+		echo " [OK]"
+}
+
+server_start_proxy() {
+	echo -n "Lancement du proxy..."
+	cd $MC_PATH/proxy && screen -h 1024 -dmS proxy java -jar -Xmx${MEMALOCPROXY}M -Xms128M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 bungeecord.jar;
+	sleep 1
+	echo " [OK]"
+}
+server_start_server() {
+	for NBRSERVMIN in `seq 1 $NBRSERV`;
+		do
+			echo -n "Lancement du serveur ${NBRSERVMIN}..."
+			cd $MC_PATH/server"${NBRSERVMIN}" && screen -h 1024 -dmS $SCREEN_NAME"${NBRSERVMIN}" java -jar -Xmx${MEMALOC}G -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR;
+			sleep 1
+			echo " [OK]"
+		done
+	echo "Tous les serveurs ont étés démarrés !\r"
+}
+
+server_start_set() {
+	echo -n "Lancement du serveur $2..."
+	cd $MC_PATH/server"$2" && screen -h 1024 -dmS $SCREEN_NAME"$2" java -jar -Xmx${MEMALOC}G -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR;
+	sleep 1
+	echo " [OK]"
+}
+
+console() {
+	screen -r $SCREEN_NAME"$2"
+}
+
+console_proxy() {
+	screen -r proxy
+}
+
+# Corps du script
+case "$1" in
+	start)
+		if [[ "$2" == "" ]]
+		then
+			server_start_proxy
+			server_start_lobby
+		elif [[ $2 == "all-server" ]]; then
+			server_start_server
+		elif [[ $2 == "proxy" ]]; then
+			server_start_proxy
+		else
+			server_start_set "$@"
+		fi
+	;;
+	stop)
+		if [[ "$2" == "" ]]
+		then
+			server_stop_proxy
+			server_stop_server
+		elif [[ $2 == "all-server" ]]; then
+			server_stop_lobby
+		elif [[ $2 == "proxy" ]]; then
+			server_stop_proxy
+		else
+			server_stop_set "$@"
+		fi
+	;;
+	restart)
+		if [[ "$2" == "" ]]
+		then
+			server_stop_proxy
+			server_stop_server
+			sleep 10
+			server_start_proxy
+			server_start_server
+		elif [[ $2 == "all-server" ]]; then
+			server_stop_server
+			sleep 10
+			server_start_server
+		elif [[ $2 == "proxy" ]]; then
+			server_stop_proxy
+			sleep 5
+			server_start_server
+		else
+			server_stop_set "$@"
+			sleep 5
+			server_start_set "$@"
+		fi
+	;;
+	console)
+	 	if [[ "$2" == "" ]]
+		then
+			echo "Veuillez spécifier un numéro de serveur ou proxy !"
+		elif [[ $2 == "proxy" ]]; then
+			console_proxy
+		else
+			console "$@"
+		fi
+	;;
+	*)
+        echo "Utilisation: service minecraft {start <numéro> <proxy> <all-server>|restart <numéro> <proxy> <all-server>|stop <numéro> <all-server> <proxy>|console <proxy> <numéro>}"
+        exit 0
+        ;;
+esac
+
+exit 0
