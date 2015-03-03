@@ -1,74 +1,185 @@
 #!/bin/bash
 #Création par unixfox (Emilien) - Created by unixfox
 #Merci Julien008 pour les suggestions et report de bugs.
-
 #Descriptions du service
 DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
 SERVICE_NAME=minecraft
-
 #Options
-MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft - Directory of your Minecraft server
-NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft - Name of the .jar file of your Minecraft server
-MEMALOC=512 #Mémoire à allouer à votre serveur minecraft - Memory of your Minecraft Server
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer. Argument warn à ajouter à la commande stop ou restart.
-SCREEN_NAME='minecraft' #Nom de la fenêtre.
-
+source config.conf
+var_DIRECTORY=${2}_DIRECTORY
+var_NAMEJAR=${2}_NAMEJAR
+var_MEMALOC=${2}_MEMALOC
+var_TPSWARN=${2}_TPSWARN
+var_CUSTOMENDCOMMAND=${2}_CUSTOMENDCOMMAND
+var_SAVEBEFORESTOP=${2}_SAVEBEFORESTOP
+group_var_DIRECTORY=group_${2}_DIRECTORY
+group_var_NAMEJAR=group_${2}_NAMEJAR
+group_var_MEMALOC=group_${2}_MEMALOC
+group_var_TPSWARN=group_${2}_TPSWARN
+group_var_NBRSERV=group_${2}_NBRSERV
+group_var_CUSTOMENDCOMMAND=group_${2}_CUSTOMENDCOMMAND
+group_var_SAVEBEFORESTOP=group_${2}_SAVEBEFORESTOP
 #Variables
-server_stop() {
-        echo -n "Arrêt du serveur Minecraft..."
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
-        sleep ${TPSWARN}
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
-        sleep 7
-        echo " [OK]"
+server_stop()
+{
+  echo -n "Arrêt du serveur Minecraft..."
+  screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+  screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
+  sleep ${TPSWARN}
+  screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
+  sleep 7
+  echo " [OK]"
 }
 
-server_start() {
-        echo -n "Lancement du serveur minecraft..."
-        cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui; 
-        sleep 1
-        echo " [OK]"
+server_stop_group()
+{
+  for NBRSERVMIN in `seq 0 $NBRSERV`;
+  do
+    echo -n "Arrêt du serveur ${NBRSERVMIN}..."
+    screen -S $SCREEN_NAME"${NBRSERVMIN}" -p 0 -X stuff "`printf "stop\r"`"
+    sleep 1
+    echo -e "\033[32m [OK]\033[0m"
+  done
 }
 
-commande() {
-     exec="$1";
-     echo "Exécution de la commande..."
-     screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
-     sleep .1
-     echo " [OK]"
+server_stop_group_set()
+{
+
+}
+
+server_stop_single() {
+  echo -n "Arrêt du serveur $2..."
+  if [ -z ${!var_SAVEBEFORESTOP} ];
+    then
+      if [ -z ${!var_CUSTOMENDCOMMAND} ];
+        then
+          if [ -z ${!var_TPSWARN} ];
+            then
+              screen -S "$2" -p 0 -X stuff "`printf "stop\r"`"
+            else
+              screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+              sleep ${var_TPSWARN}
+              screen -S "$2" -p 0 -X stuff "`printf "stop\r"`"
+      fi
+    else
+      if [ -z ${!var_CUSTOMENDCOMMAND} ];
+        then
+          if [ -z ${!var_TPSWARN} ];
+            then
+              screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
+              sleep ${var_TPSWARN}
+              screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
+              sleep 3
+              screen -S "$2" -p 0 -X stuff "`printf "$var_CUSTOMENDCOMMAND\r"`"
+            else
+              screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
+              sleep 3
+              screen -S "$2" -p 0 -X stuff "`printf "$var_CUSTOMENDCOMMAND\r"`"
+          fi
+      fi
+  fi
+  sleep 2
+  echo -e "\033[32m [OK]\033[0m"
+}
+
+server_start_single() 
+{
+  echo -n "Lancement du serveur $2..."
+  cd $var_DIRECTORY && screen -h 1024 -dmS $2 java -jar -Xmx${var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $var_NAMEJAR nogui; 
+  sleep 1
+  echo -e "\033[32m [OK]\033[0m"
+}
+
+server_start_group()
+{
+  for NBRSERVMIN in `seq 0 $group_var_NBRSERV`;
+  do
+    echo -n "Lancement du serveur $2 N°${group_var_NBRSERV}..."
+    cd $group_var_DIRECTORY/server"${group_var_NBRSERV}" && screen -h 1024 -dmS $SCREEN_NAME"${group_var_NBRSERV}" java -jar -Xmx${group_var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $group_var_NAMEJAR nogui;
+    sleep 1
+    echo " \032[COLORm [OK]"
+  done
+  echo -e "\033[32m [OK]\033[0m"
+}
+
+server_start_group_set()
+{
+
+}
+
+server_start_set() {
+  echo -n "Lancement du serveur $2..."
+  cd $MC_PATH/server"$2" && screen -h 1024 -dmS minecraft"$2" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR;
+  sleep 1
+  echo -e "\033[32m [OK]\033[0m"
+}
+
+commande() 
+{
+  exec="$1";
+  echo "Exécution de la commande..."
+  screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
+  sleep 1
+  echo -e "\033[32m [OK]\033[0m"
 }
 
 console() {
      screen -r $SCREEN_NAME
 }
 
+error_invalid_type_server()
+{
+  echo -e "\033[31m[Error]\033[0m Le nom du serveur spécifié est introuvable.";
+}
+
 # Corps du script
 case "$1" in
-  start)
-        server_start
-        ;;
-  stop)
-        server_stop
-        ;;
-  restart)
-    server_stop
-    server_start
-    ;;
-  exec)
-        if [ $# -gt 1 ]; then
-        shift
-        commande "$*"
+start)
+    if [ -z ${!var_DIRECTORY} ];
+    then
+      if [ -z ${!group_var_DIRECTORY} ];
+        then
+          error_invalid_type_server
         else
-        echo "Vous devez spécifier une commande (exemple : 'help')."
-  fi;;
-  console)
-    console
-    ;;
-  *)
-        echo "Utilisation: service minecraft {start|stop|exec <commande>|console}"
-        exit 0
-        ;;
+          if [[ "$3" == "" ]]
+            then
+              echo -e "\033[32mReturn group_var exist and 3th argument is specified.\033[0m"
+            else
+              echo -e "\033[32mReturn group_var exist.\033[0m"
+          fi
+      fi
+    else 
+      echo -e "\033[32mReturn var exist.\033[0m"
+fi;;
+stop)
+  if [[ "$2" == "" ]]
+  then
+    server_stop
+  else
+    server_stop_set "$@"
+fi
+;;
+restart)
+  server_stop
+sleep 3
+  server_start
+;;
+exec)
+  if [ $# -gt 1 ]; 
+  then
+    shift
+    commande "$*"
+  else
+    echo "Vous devez spécifier une commande (exemple : 'help')."
+fi
+;;
+console)
+  console
+;;
+*)
+echo "Utilisation: service minecraft {start <nomserveur> <numéro>|stop <nomserveur> <numéro>|exec <nomserveur> <numéro> <commande>|console <nomserveur> <numéro>}"
+exit 0
+;;
 esac
 
 exit 0
