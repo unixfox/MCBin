@@ -1,0 +1,6 @@
+site_name: Service Linux Minecraft
+pages:
+- [index.md, Home]
+- [installation.md, Installation]
+- [roadmap.md, Roadmap]
+theme: readthedocs
