@@ -2,7 +2,7 @@
 
 ## Description
 
-Ce projet a pour but de vous founir un script stable, modulable et facile d'utilisateur pour gérer votre(vos) serveur(s) Minecraft.
+Ce projet a pour but de vous founir un script stable, modulable et facile d'utilisation pour gérer votre(vos) serveur(s) Minecraft.
 
 ## Fonctionnalités
 
