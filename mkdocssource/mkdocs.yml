@@ -1,4 +1,4 @@
-site_name: Service Linux Minecraft
+site_name: MCBin
 pages:
 - [index.md, Home]
 - [installation.md, Installation]
