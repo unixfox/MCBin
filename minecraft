@@ -170,14 +170,14 @@ exec)
     shift
     commande "$*"
   else
-    echo "Vous devez spécifier une commande (exemple : 'help')."
+    echo -e "\033[34mVous devez spécifier une commande (exemple : 'help').\033[0m"
 fi
 ;;
 console)
   console
 ;;
 *)
-echo "Utilisation: service minecraft {start <nomserveur> <numéro>|stop <nomserveur> <numéro>|exec <nomserveur> <numéro> <commande>|console <nomserveur> <numéro>}"
+echo "\033[34mUtilisation: service minecraft {start <nomserveur> <numéro>|stop <nomserveur> <numéro>|exec <nomserveur> <numéro> <commande>|console <nomserveur> <numéro>}\033[0m"
 exit 0
 ;;
 esac
