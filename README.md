@@ -1,5 +1,5 @@
 ![Icon terminal](http://findicons.com/files/icons/1728/still_life/128/gnome_terminal.png)
-[MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/Minecraft-Server-Linux-service)
+[MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/MCBin)
 ==============================
 
 Script Bash pour gérer facilement et simplement votre(vos) serveur(s) Minecraft.
