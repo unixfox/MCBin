@@ -1,4 +1,4 @@
-![Icon terminal](http://findicons.com/files/icons/1728/still_life/128/gnome_terminal.png)
+![ComputerCraft](http://www.computercraft.info/wiki/images/d/da/Ccblink.gif)
 [MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/MCBin)
 ==============================
 
