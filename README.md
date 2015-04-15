@@ -1,6 +1,5 @@
-[![Stories in Ready](https://badge.waffle.io/unixfox/mcbin.png?label=ready&title=Ready)](https://waffle.io/unixfox/mcbin)
 ![ComputerCraft](http://www.computercraft.info/wiki/images/d/da/Ccblink.gif)
-[MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/MCBin)
+[MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/MCBin) [![Stories in Ready](https://badge.waffle.io/unixfox/mcbin.png?label=ready&title=Ready)](https://waffle.io/unixfox/mcbin)
 ==============================
 
 Script Bash pour gérer facilement et simplement votre(vos) serveur(s) Minecraft.
