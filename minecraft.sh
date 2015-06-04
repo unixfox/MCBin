@@ -2,7 +2,7 @@
 #By Julien00859 & unixfox
 MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/'
 MC_JAR=$(ls $MC_PATH | grep minecraft_server)
-SCREEN_NAME=Fukkit
+SCREEN_NAME=minecraft
 MEMALOC=2048
 
 SERVER_NOT_FOUND() {
