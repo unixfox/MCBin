@@ -1,9 +1,9 @@
 #! /bin/bash
 #By Julien00859 & unixfox
-MC_PATH=~/Minecraft
-MC_JAR=$(ls $MC_PATH | grep minecraft_server)
-SCREEN_NAME=Fukkit
-MEMALOC=2048
+MC_PATH=~/Minecraft #Racine du serveur
+MC_JAR=$(ls $MC_PATH | grep minecraft_server) #Nom du jar à exécuter
+SCREEN_NAME=Minecraft #Le nom du screen sur lequel le serveur tournera
+MEMALOC=2048 #La RAM allouée max aux serveur en mega octés
 
 SERVER_NOT_FOUND() {
 	echo "Le serveur n'est pas allumé. Opération annulée"
@@ -12,7 +12,7 @@ SERVER_NOT_FOUND() {
 SERVER_START() {
 	echo -en "[..] Lancement du serveur\r"
 	cd ${MC_PATH}/
-	screen -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $MC_JAR
+	screen -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $MC_JAR nogui
 	while [ -z "$(grep Done $MC_PATH/logs/latest.log)" ]
 	do
 		sleep 0.1
@@ -27,7 +27,7 @@ SERVER_STOP() {
 		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt dans $i secondes\r\n"`"
 		sleep 1
 	done
-	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "SERVER_STOP\r\n"`"
+	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r\n"`"
 	while [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	do
 		sleep 0.1
@@ -69,16 +69,17 @@ case "$1" in
 			echo "Utilisation: $0 $1 <command>"
 		else
 			msg=${@#exec}
+			exec_time="$(date "+%H:%M:%S")"
 			screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$msg\r\n"`"
 			sleep 0.1
-			tail ${MC_PATH}/logs/latest.log -n 1
+			tail ${MC_PATH}/logs/latest.log -n 20 | grep $exec_time | grep -v "@"
 		fi
 	else
 		SERVER_NOT_FOUND
 	fi
 	;;
   log)
-	tail -f ${MC_PATH}/logs/latest.log
+	tail ${@#log} ${MC_PATH}/logs/latest.log | grep -v "@"
 	;;
   status)
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
@@ -93,7 +94,7 @@ case "$1" in
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	then
 		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Initiation d'une sauvegarde.\r\n"`"
-		retart=1
+		restart=1
 		SERVER_STOP
 	else
 		restart=0
@@ -125,6 +126,6 @@ case "$1" in
 	fi
 	;;
   *)
-        echo -e "Utilisation:\nstart\t\tLance le serveur\nstop\t\tArrête le serveur\nrestart\t\tRelance le serveur\nexec <cmd>\tExécute la commande <cmd> et affiche le retour\nlog\t\tAffiche les logs du serveur (CTRL C pour quitter)\nstatus\t\tAffiche l'état du serveur\nbackup\t\tEffectue une sauvegarde de la map\nconsole\t\tRejoint la console du serveur (CTRL A + D pour quitter)\n"
+        echo -e "Utilisation:\nstart\t\tLance le serveur\nstop\t\tArrête le serveur\nrestart\t\tRelance le serveur\nexec <cmd>\tExécute la commande <cmd> et affiche le retour\nlog <tail args>\t\tAffiche les logs du serveur\nstatus\t\tAffiche l'état du serveur\nbackup\t\tEffectue une sauvegarde de la map\nconsole\t\tRejoint la console du serveur (CTRL A + D pour quitter)\n"
         exit 1
 esac
