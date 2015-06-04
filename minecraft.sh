@@ -41,7 +41,7 @@ case "$1" in
 	then
 		SERVER_START
 	else
-		echo "Le serveur est déjà lancer. Opération annulée"
+		echo "Le serveur est déjà lancé. Opération annulée"
 		screen -ls | grep $SCREEN_NAME
 	fi
         ;;
