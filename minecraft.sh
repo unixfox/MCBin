@@ -1,50 +1,9 @@
-<<<<<<< HEAD
-#!/bin/bash
-#Création par unixfox (Emilien)
-#Merci Julien008 pour les suggestions et report de bugs.
-
-#Descriptions du service
-DESC="Script permettant de gérer un serveur Minecraft à partir d'un service."
-SERVICE_NAME=minecraft
-
-#Options
-MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/' #Répertoire de votre serveur minecraft.
-NOM_JAR='minecraft_server.jar' #Nom du fichier .jar de votre serveur minecraft.
-MEMALOC=512 #Mémoire à allouer à votre serveur minecraft.
-TPSWARN=10 #Temps après le quel le serveur va s'éteindre ou redémarrer.
-SCREEN_NAME='minecraft' #Nom de la fenêtre.
-
-#Variables
-server_stop() {
-        echo -n "Arrêt du serveur Minecraft..."
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt du serveur dans $TPSWARN SECONDES.\r"`"
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "save-all\r"`"
-        sleep ${TPSWARN}
-        screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
-        sleep 7
-        echo " [OK]"
-}
-
-server_start() {
-        echo -n "Lancement du serveur minecraft..."
-        cd $MC_PATH && screen -h 1024 -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR nogui; 
-        sleep 1
-        echo " [OK]"
-}
-
-commande() {
-     exec="$1";
-     echo "Exécution de la commande..."
-     screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
-     sleep .1
-     echo " [OK]"
-=======
 #! /bin/bash
 #By Julien00859 & unixfox
-MC_PATH=~/Minecraft #Racine du serveur
-MC_JAR=$(ls $MC_PATH | grep minecraft_server) #Nom du jar à exécuter
-SCREEN_NAME=Minecraft #Le nom du screen sur lequel le serveur tournera
-MEMALOC=2048 #La RAM maximale allouée au serveur en MO
+MC_PATH=~/Minecraft
+MC_JAR=$(ls $MC_PATH | grep minecraft_server)
+SCREEN_NAME=Fukkit
+MEMALOC=2048
 
 SERVER_NOT_FOUND() {
 	echo "Le serveur n'est pas allumé. Opération annulée"
@@ -53,7 +12,7 @@ SERVER_NOT_FOUND() {
 SERVER_START() {
 	echo -en "[..] Lancement du serveur\r"
 	cd ${MC_PATH}/
-	screen -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $MC_JAR nogui
+	screen -dmS $SCREEN_NAME java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $MC_JAR
 	while [ -z "$(grep Done $MC_PATH/logs/latest.log)" ]
 	do
 		sleep 0.1
@@ -68,48 +27,16 @@ SERVER_STOP() {
 		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt dans $i secondes\r\n"`"
 		sleep 1
 	done
-	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r\n"`"
+	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "SERVER_STOP\r\n"`"
 	while [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	do
 		sleep 0.1
 	done
 	echo "[Ok]"
->>>>>>> 1920713eaa37e281eea5fd2e5da14e8583eb6b44
 }
 
-console() {
-     screen -r $SCREEN_NAME
-}
-
-# Corps du script
 case "$1" in
   start)
-<<<<<<< HEAD
-        server_start
-        ;;
-  stop)
-        server_stop
-        ;;
-  restart)
-    server_stop
-    server_start
-    ;;
-  exec)
-        if [ $# -gt 1 ]; then
-        shift
-        commande "$*"
-        else
-        echo "Vous devez spécifier une commande (exemple : 'help')."
-  fi
-  ;;
-  console)
-    console
-    ;;
-  *)
-        echo "Utilisation: service minecraft {start|stop|exec <commande>|console}"
-        exit 0
-        ;;
-=======
 	if [ -z "$(screen -ls | grep $SCREEN_NAME)"  ]
 	then
 		SERVER_START
@@ -142,17 +69,16 @@ case "$1" in
 			echo "Utilisation: $0 $1 <command>"
 		else
 			msg=${@#exec}
-			exec_time="$(date "+%H:%M:%S")"
 			screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$msg\r\n"`"
 			sleep 0.1
-			tail ${MC_PATH}/logs/latest.log -n 20 | grep $exec_time | grep -v "@" | tail -n 3
+			tail ${MC_PATH}/logs/latest.log -n 1
 		fi
 	else
 		SERVER_NOT_FOUND
 	fi
 	;;
   log)
-	tail ${@#log} ${MC_PATH}/logs/latest.log | grep -v "@"
+	tail -f ${MC_PATH}/logs/latest.log
 	;;
   status)
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
@@ -167,7 +93,7 @@ case "$1" in
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	then
 		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Initiation d'une sauvegarde.\r\n"`"
-		restart=1
+		retart=1
 		SERVER_STOP
 	else
 		restart=0
@@ -199,9 +125,6 @@ case "$1" in
 	fi
 	;;
   *)
-        echo -e "Utilisation:\nstart\t\tLance le serveur\nstop\t\tArrête le serveur\nrestart\t\tRelance le serveur\nexec <cmd>\tExécute la commande <cmd> et affiche le retour\nlog <tail args>\t\tAffiche les logs du serveur\nstatus\t\tAffiche l'état du serveur\nbackup\t\tEffectue une sauvegarde de la map\nconsole\t\tRejoint la console du serveur (CTRL A + D pour quitter)\n"
+        echo -e "Utilisation:\nstart\t\tLance le serveur\nstop\t\tArrête le serveur\nrestart\t\tRelance le serveur\nexec <cmd>\tExécute la commande <cmd> et affiche le retour\nlog\t\tAffiche les logs du serveur (CTRL C pour quitter)\nstatus\t\tAffiche l'état du serveur\nbackup\t\tEffectue une sauvegarde de la map\nconsole\t\tRejoint la console du serveur (CTRL A + D pour quitter)\n"
         exit 1
->>>>>>> 1920713eaa37e281eea5fd2e5da14e8583eb6b44
 esac
-
-exit 0
