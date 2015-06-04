@@ -20,6 +20,10 @@ group_var_NBRSERV=group_${2}_NBRSERV
 group_var_CUSTOMENDCOMMAND=group_${2}_CUSTOMENDCOMMAND
 group_var_SAVEBEFORESTOP=group_${2}_SAVEBEFORESTOP
 #Variables
+return_correct()
+{
+  echo -e "\033[32m [OK]\033[0m"
+}
 server_stop()
 {
   echo -n "Arrêt du serveur Minecraft..."
@@ -28,17 +32,17 @@ server_stop()
   sleep ${TPSWARN}
   screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r"`"
   sleep 7
-  echo " [OK]"
+  return_correct
 }
 
 server_stop_group()
 {
-  for NBRSERVMIN in `seq 0 $NBRSERV`;
+  for NBRSERVMIN in `seq 1 $group_var_NBRSERV`;
   do
     echo -n "Arrêt du serveur ${NBRSERVMIN}..."
     screen -S $SCREEN_NAME"${NBRSERVMIN}" -p 0 -X stuff "`printf "stop\r"`"
     sleep 1
-    echo -e "\033[32m [OK]\033[0m"
+    return_correct
   done
 }
 
@@ -47,7 +51,8 @@ server_stop_group_set()
 
 }
 
-server_stop_single() {
+server_stop_single()
+{
   echo -n "Arrêt du serveur $2..."
   if [ -z ${!var_SAVEBEFORESTOP} ];
     then
@@ -79,48 +84,49 @@ server_stop_single() {
       fi
   fi
   sleep 2
-  echo -e "\033[32m [OK]\033[0m"
+  return_correct
 }
 
-server_start_single() 
+server_start_single()
 {
   echo -n "Lancement du serveur $2..."
-  cd $var_DIRECTORY && screen -h 1024 -dmS $2 java -jar -Xmx${var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $var_NAMEJAR nogui; 
+  cd $var_DIRECTORY && screen -h 1024 -dmS $2 java -jar -Xmx${var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $var_NAMEJAR nogui;
   sleep 1
-  echo -e "\033[32m [OK]\033[0m"
+  return_correct
 }
 
 server_start_group()
 {
-  for NBRSERVMIN in `seq 0 $group_var_NBRSERV`;
+  for NBRSERVMIN in `seq 1 $group_var_NBRSERV`;
   do
-    echo -n "Lancement du serveur $2 N°${group_var_NBRSERV}..."
-    cd $group_var_DIRECTORY/server"${group_var_NBRSERV}" && screen -h 1024 -dmS $SCREEN_NAME"${group_var_NBRSERV}" java -jar -Xmx${group_var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $group_var_NAMEJAR nogui;
+    echo -e -n "Lancement du serveur \033[34m$2\033[0m N°\033[36m${NBRSERVMIN}\033[0m..."
+    cd $group_var_DIRECTORY/server"${NBRSERVMIN}" && screen -h 1024 -dmS "$2""${NBRSERVMIN}" java -jar -Xmx${group_var_MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $group_var_NAMEJAR nogui;
     sleep 1
-    echo " \032[COLORm [OK]"
+    return_correct
   done
-  echo -e "\033[32m [OK]\033[0m"
+  echo -e "\033[32m[SUCCESS]\033[0m Serveurs démarrés"
 }
 
 server_start_group_set()
 {
-
+  echo -e -n "Lancement du serveur \033[34m$2\033[0m N°\033[36m${3}\033[0m..."
+  cd $group_var_DIRECTORY/server"$3" && screen -h 1024 -dmS "$2""$3" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $group_var_NAMEJAR nogui;
 }
 
 server_start_set() {
   echo -n "Lancement du serveur $2..."
   cd $MC_PATH/server"$2" && screen -h 1024 -dmS minecraft"$2" java -jar -Xmx${MEMALOC}M -Xms512M -XX:MaxPermSize=128M -Dfile.encoding=UTF8 $NOM_JAR;
   sleep 1
-  echo -e "\033[32m [OK]\033[0m"
+  return_correct
 }
 
-commande() 
+commande()
 {
   exec="$1";
   echo "Exécution de la commande..."
   screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$exec\r"`"
   sleep 1
-  echo -e "\033[32m [OK]\033[0m"
+  return_correct
 }
 
 console() {
@@ -148,7 +154,7 @@ start)
               echo -e "\033[32mReturn group_var exist.\033[0m"
           fi
       fi
-    else 
+    else
       echo -e "\033[32mReturn var exist.\033[0m"
 fi;;
 stop)
@@ -165,7 +171,7 @@ sleep 3
   server_start
 ;;
 exec)
-  if [ $# -gt 1 ]; 
+  if [ $# -gt 1 ];
   then
     shift
     commande "$*"
