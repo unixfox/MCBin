@@ -3,7 +3,7 @@
 MC_PATH=~/Minecraft #Racine du serveur
 MC_JAR=$(ls $MC_PATH | grep minecraft_server) #Nom du jar à exécuter
 SCREEN_NAME=Minecraft #Le nom du screen sur lequel le serveur tournera
-MEMALOC=2048 #La RAM allouée max aux serveur en mega octés
+MEMALOC=2048 #La RAM maximale allouée au serveur en MO
 
 SERVER_NOT_FOUND() {
 	echo "Le serveur n'est pas allumé. Opération annulée"
@@ -72,7 +72,7 @@ case "$1" in
 			exec_time="$(date "+%H:%M:%S")"
 			screen -S $SCREEN_NAME -p 0 -X stuff "`printf "$msg\r\n"`"
 			sleep 0.1
-			tail ${MC_PATH}/logs/latest.log -n 20 | grep $exec_time | grep -v "@"
+			tail ${MC_PATH}/logs/latest.log -n 20 | grep $exec_time | grep -v "@" | tail -n 3
 		fi
 	else
 		SERVER_NOT_FOUND
