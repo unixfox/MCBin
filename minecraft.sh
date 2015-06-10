@@ -5,6 +5,12 @@ MC_JAR=$(ls $MC_PATH | grep minecraft_server)
 SCREEN_NAME=minecraft
 MEMALOC=2048
 
+#Check if screen is installed
+
+if ! type "screen" > /dev/null; then
+  sudo apt-get -y install screen
+fi
+
 SERVER_NOT_FOUND() {
 	echo "Le serveur n'est pas allumé. Opération annulée"
 }
