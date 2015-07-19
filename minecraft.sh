@@ -111,7 +111,7 @@ case "$1" in
 		echo "[Ok]"
 	fi
 	cd ${MC_PATH}/
-	echo -en "[..] Archivage et compréssion du dossier $(ls | grep -i world)\r"
+	echo -en "[..] Archivage et compression du dossier $(ls | grep -i world)\r"
 	name="$(date "+%F_%H-%M-%S")"
 	tar -cf Backup/$name.tar "$(ls | grep -i world )"
 	gzip Backup/$name.tar
