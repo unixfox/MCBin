@@ -33,7 +33,7 @@ SERVER_STOP() {
 		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Arrêt dans $i secondes\r\n"`"
 		sleep 1
 	done
-	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "SERVER_STOP\r\n"`"
+	screen -S $SCREEN_NAME -p 0 -X stuff "`printf "stop\r\n"`"
 	while [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	do
 		sleep 0.1
@@ -59,7 +59,7 @@ case "$1" in
 		SERVER_NOT_FOUND
 	fi
         ;;
-  retart)
+  restart)
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	then
 		SERVER_STOP
@@ -98,8 +98,8 @@ case "$1" in
   backup)
 	if [ -n "$(screen -ls | grep $SCREEN_NAME)" ]
 	then
-		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Initiation d'une sauvegarde.\r\n"`"
-		retart=1
+		screen -S $SCREEN_NAME -p 0 -X stuff "`printf "say Initiation de la sauvegarde.\r\n"`"
+		restart=1
 		SERVER_STOP
 	else
 		restart=0
