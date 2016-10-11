@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #By Julien00859 & unixfox
 MC_PATH='/le/répertoire/où/se/trouve/votre/serveur/'
 MC_JAR=$(ls $MC_PATH | grep minecraft_server)
