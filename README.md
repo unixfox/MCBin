@@ -2,7 +2,7 @@
 [MCBin](http://mcbin.unixfox.eu/) [![Build Status](https://travis-ci.org/unixfox/MCBin.svg?branch=master)](https://travis-ci.org/unixfox/MCBin)
 ==============================
 
-A Linux service for your Minecraft server.
+Bash script to easily and simply manage your (your) server (s) Minecraft [English version here](https://github.com/unixfox/Minecraft-Server-Linux-service/tree/master-en).
 
 -------------------------
 
@@ -19,3 +19,4 @@ Un service Linux pour votre serveur Minecraft. [Version française ici](https://
 # How to use the service ?
 
 Just type the command : `service minecraft` and see the possibilities.
+=======
